@@ -40,6 +40,4 @@ describe("POST /auth/register", () => {
 		});
 		expect(decodedToken.exp).toBeGreaterThan(Date.now() / 1000);
 	});
-
-	// Additional tests (e.g., login, missing fields, duplicate email) would follow the same structure
 });
