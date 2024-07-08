@@ -1,17 +1,26 @@
+// authToken.js
+
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
-module.exports = (req, res, next) => {
-	const token = req.header("Authorization").replace("Bearer ", "");
+module.exports = function authToken(req, res, next) {
+	// Extract token from Authorization header
+	const authHeader = req.headers.authorization;
 
-	if (!token) {
-		return res.status(401).json({ message: "Authentication failed" });
+	if (!authHeader || !authHeader.startsWith("Bearer ")) {
+		return res.status(401).json({ message: "Unauthorized" });
 	}
 
+	// Get the JWT token excluding 'Bearer '
+	const token = authHeader.replace("Bearer ", "");
+
 	try {
-		const decoded = jwt.verify(token, process.env.JWT_KEY);
-		req.user = decoded;
-		next();
+		// Verify token
+		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		req.user = decoded; // Attach decoded user information to request object
+		next(); // Call next middleware
 	} catch (error) {
-		res.status(401).json({ message: "Authentication failed" });
+		console.error("JWT verification error:", error);
+		return res.status(403).json({ message: "Forbidden" });
 	}
 };

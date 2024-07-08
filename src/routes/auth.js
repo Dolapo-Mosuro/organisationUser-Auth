@@ -133,10 +133,11 @@ router.post("/login", async (req, res) => {
 			},
 		});
 	} catch (error) {
-		console.error("Login error:", error);
-		res.status(500).json({
-			status: "error",
-			message: "Internal server error",
+		console.error("Registration error:", error);
+		res.status(401).json({
+			status: "Bad request",
+			message: "Authentication failed",
+			statusCode: 401,
 		});
 	}
 });
