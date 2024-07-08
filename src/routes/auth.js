@@ -3,14 +3,40 @@ const router = express.Router();
 const { User, Org } = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-// const authToken = require("../middlewares/authToken");
 require("dotenv").config();
 
+const generateUniqueId = (value) => {
+	const timestamp = Date.now();
+	const randomString = Math.random().toString(36).substring(2, 15);
+	return `${value.toLowerCase()}-${timestamp}-${randomString}`;
+};
+
 router.post("/register", async (req, res) => {
-	const { userId, firstName, lastName, email, password, phone } = req.body;
+	const { firstName, lastName, email, password, phone } = req.body;
+
+	// Validate input fields
+	if (!firstName || !lastName || !email || !password) {
+		return res.status(422).json({
+			errors: [
+				{
+					field: !firstName
+						? "firstName"
+						: !lastName
+						? "lastName"
+						: !email
+						? "email"
+						: "password",
+					message: "This field is required",
+				},
+			],
+		});
+	}
 
 	try {
 		const hashedPassword = await bcrypt.hash(password, 10);
+
+		const userId = generateUniqueId("user");
+
 		const user = await User.create({
 			userId,
 			firstName,
@@ -36,75 +62,82 @@ router.post("/register", async (req, res) => {
 			status: "success",
 			message: "Registration successful",
 			data: {
-				userId: user.userId,
-				firstName: user.firstName,
-				lastName: user.lastName,
-				email: user.email,
-				phone: user.phone,
+				accessToken: token,
+				user: {
+					userId: user.userId,
+					firstName: user.firstName,
+					lastName: user.lastName,
+					email: user.email,
+					phone: user.phone,
+				},
 			},
 		});
 	} catch (error) {
-		if (error.name === "SequelizeValidationError") {
-			const errors = error.errors.map((err) => ({
-				field: err.path,
-				message: err.message,
-			}));
-			res.status(422).json({
-				errors,
-			});
-		} else {
-			res.status(500).json({
-				status: "error",
-				message: "Internal server error",
-			});
-		}
+		console.error("Registration error:", error);
+		res.status(400).json({
+			status: "Bad request",
+			message: "Registration unsuccessful",
+			statusCode: 400,
+		});
 	}
 });
 
-// router.get("/profile", authToken, async (req, res) => {
-// 	try {
-// 		const user = await User.findByPk(req.user.userId);
-// 		res.json(user);
-// 	} catch (error) {
-// 		res.status(500).json({ message: "Internal server error" });
-// 	}
-// });
+// Login Route
 router.post("/login", async (req, res) => {
 	const { email, password } = req.body;
+	console.log({ email, password });
 
 	try {
-		//check if user exists
+		// Check if user exists
 		const user = await User.findOne({ where: { email } });
 
 		if (!user) {
-			return res.status(404).json({ message: "User not found" });
+			return res.status(401).json({
+				status: "Bad request",
+				message: "Authentication failed",
+				statusCode: 401,
+			});
 		}
-		//Validate password
+
+		// Validate password
 		const isPasswordValid = await bcrypt.compare(password, user.password);
 
 		if (!isPasswordValid) {
-			return res.status(401).json({ message: "Invalid password" });
+			return res.status(401).json({
+				status: "Bad request",
+				message: "Authentication failed",
+				statusCode: 401,
+			});
 		}
 
 		// Generate JWT token
 		const token = jwt.sign(
-			{ userId: user.id, email: user.email },
-			process.env.JWT_KEY,
+			{ userId: user.userId, email: user.email },
+			process.env.JWT_SECRET,
 			{ expiresIn: "1h" }
 		);
-		//Response with token and user data
+
+		// Response with token and user data
 		res.status(200).json({
+			status: "success",
 			message: "Login successful",
-			token,
-			userId: user.id,
-			firstName: user.firstName,
-			lastName: user.lastName,
-			email: user.email,
-			phone: user.phone,
+			data: {
+				accessToken: token,
+				user: {
+					userId: user.userId,
+					firstName: user.firstName,
+					lastName: user.lastName,
+					email: user.email,
+					phone: user.phone,
+				},
+			},
 		});
 	} catch (error) {
-		console.error(error)("Login error:", error);
-		res.status(500).json({ message: "Internal server error" });
+		console.error("Login error:", error);
+		res.status(500).json({
+			status: "error",
+			message: "Internal server error",
+		});
 	}
 });
 
