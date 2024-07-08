@@ -11,5 +11,12 @@
 			"src": "/(.*)",
 			"dest": "/src/app.js"
 		}
-	]
+	],
+	"env": {
+		"DATABASE_NAME": "org_user_db",
+		"DATABASE_USER": "mo_db",
+		"DATABASE_PASSWORD": "admin756",
+		"DATABASE_HOST": "localhost",
+		"DATABASE_PORT": "5432"
+	}
 }

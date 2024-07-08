@@ -5,11 +5,6 @@ const User = require("./user");
 const Org = sequelize.define(
 	"Org",
 	{
-		id: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
-			primaryKey: true,
-		},
 		orgId: {
 			type: DataTypes.STRING,
 			unique: true,
