@@ -133,7 +133,7 @@ router.post("/login", async (req, res) => {
 			},
 		});
 	} catch (error) {
-		console.error("Registration error:", error);
+		console.error("Login error:", error);
 		res.status(401).json({
 			status: "Bad request",
 			message: "Authentication failed",
