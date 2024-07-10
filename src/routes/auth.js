@@ -13,7 +13,7 @@ const generateUniqueId = (value) => {
 
 router.post("/register", async (req, res) => {
 	const { firstName, lastName, email, password, phone } = req.body;
-
+	console.log(req.body);
 	// Validate input fields
 	if (!firstName || !lastName || !email || !password) {
 		return res.status(422).json({
@@ -48,8 +48,8 @@ router.post("/register", async (req, res) => {
 
 		const defaultOrg = await Org.create({
 			orgId: `org-${userId}`,
-			name: `Default Organization for ${userId}`,
-			description: `This is the default organization for ${firstName} ${lastName}`,
+			name: `Default organisation for ${userId}`,
+			description: `This is the default organisation for ${firstName} ${lastName}`,
 		});
 
 		await user.addOrg(defaultOrg);

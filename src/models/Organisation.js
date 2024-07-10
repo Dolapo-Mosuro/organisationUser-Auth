@@ -20,7 +20,7 @@ const Organisation = sequelize.define(
 		},
 	},
 	{
-		tableName: "organizations",
+		tableName: "organisations",
 		timestamps: true,
 	}
 );

@@ -65,7 +65,7 @@ router.get("/organisations", async (req, res) => {
 		}
 		res.status(201).json({
 			status: "success",
-			message: "Organization created successfully",
+			message: "organisation created successfully",
 			data: {
 				organisations: user.Orgs.map((org) => ({
 					orgId: org.orgId,
@@ -75,7 +75,7 @@ router.get("/organisations", async (req, res) => {
 			},
 		});
 	} catch (error) {
-		console.error("Error fetching user's organizations:", error);
+		console.error("Error fetching user's organisations:", error);
 		res.status(400).json({ message: "Client error" });
 	}
 });
@@ -86,12 +86,12 @@ router.get("/organisations/:orgId", authToken, async (req, res) => {
 			where: { orgId: req.params.orgId },
 		});
 		if (!org) {
-			return res.status(404).json({ message: "Organization not found" });
+			return res.status(404).json({ message: "organisation not found" });
 		}
 
 		res.status(200).json({
 			status: "success",
-			message: "User added to organization successfully",
+			message: "User added to organisation successfully",
 			data: {
 				orgId: org.orgId,
 				name: org.name,
@@ -99,7 +99,7 @@ router.get("/organisations/:orgId", authToken, async (req, res) => {
 			},
 		});
 	} catch (error) {
-		console.error("Error fetching organization:", error);
+		console.error("Error fetching organisation:", error);
 		res.status(500).json({ message: "Internal server error" });
 	}
 });
@@ -115,7 +115,7 @@ router.post("/organisations", authToken, async (req, res) => {
 		});
 		res.status(201).json({
 			status: "success",
-			message: "Organization created successfully",
+			message: "organisation created successfully",
 			data: {
 				orgId: organisation.orgId,
 				name: organisation.name,
@@ -148,7 +148,7 @@ router.post("/organisations/:orgId/users", authToken, async (req, res) => {
 			where: { orgId: req.params.orgId },
 		});
 		if (!organisation) {
-			return res.status(404).json({ message: "Organization not found" });
+			return res.status(404).json({ message: "organisation not found" });
 		}
 		const user = await User.findByPk(userId);
 		if (!user) {
@@ -157,7 +157,7 @@ router.post("/organisations/:orgId/users", authToken, async (req, res) => {
 		await organisation.addUser(user);
 		res
 			.status(200)
-			.json({ message: "User added to organization successfully" });
+			.json({ message: "User added to organisation successfully" });
 	} catch (error) {
 		res.status(500).json({ message: "Internal server error" });
 	}
