@@ -46,7 +46,7 @@ router.get("/users/:id", authToken, async (req, res) => {
 	}
 });
 
-router.get("/users", async (req, res) => {
+router.get("/users", authToken, async (req, res) => {
 	try {
 		const users = await User.findAll();
 		res.json(users);
@@ -63,20 +63,41 @@ router.get("/organisations", async (req, res) => {
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
 		}
-		res.json(user.Orgs);
+		res.status(201).json({
+			status: "success",
+			message: "Organization created successfully",
+			data: {
+				organisations: user.Orgs.map((org) => ({
+					orgId: org.orgId,
+					name: org.name,
+					description: org.description,
+				})),
+			},
+		});
 	} catch (error) {
-		res.status(500).json({ message: "Internal server error" });
+		console.error("Error fetching user's organizations:", error);
+		res.status(400).json({ message: "Client error" });
 	}
 });
 
-router.get("/organisations/:orgId", async (req, res) => {
+router.get("/organisations/:orgId", authToken, async (req, res) => {
 	try {
 		const org = await Org.findOne({ where: { orgId: req.params.orgId } });
 		if (!org) {
 			return res.status(404).json({ message: "Organization not found" });
 		}
-		res.json(org);
+
+		res.status(200).json({
+			status: "success",
+			message: "User added to organization successfully",
+			data: {
+				orgId: org.orgId,
+				name: org.name,
+				description: org.description,
+			},
+		});
 	} catch (error) {
+		console.error("Error fetching organization:", error);
 		res.status(500).json({ message: "Internal server error" });
 	}
 });
@@ -86,7 +107,15 @@ router.post("/organisations", async (req, res) => {
 
 	try {
 		const org = await Org.create({ orgId, name, description });
-		res.status(201).json(org);
+		es.status(201).json({
+			status: "success",
+			message: "Organization created successfully",
+			data: {
+				orgId: org.orgId,
+				name: org.name,
+				description: org.description,
+			},
+		});
 	} catch (error) {
 		if (error.name === "SequelizeValidationError") {
 			const errors = error.errors.map((err) => ({
