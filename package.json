@@ -7,7 +7,7 @@
 		"start": "node src/app.js",
 		"dev": "nodemon src/app.js",
 		"build": "echo 'No build step required'",
-		"test": "jest --detectOpenHandles"
+		"test": "jest"
 	},
 	"repository": {
 		"type": "git",

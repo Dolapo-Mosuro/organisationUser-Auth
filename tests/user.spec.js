@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../src/app"); // Assuming your Express app is exported from src/app.js
+const app = require("../src/app");
 
 describe("User Endpoints", () => {
 	let authToken;
