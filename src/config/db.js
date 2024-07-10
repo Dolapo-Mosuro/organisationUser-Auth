@@ -4,8 +4,8 @@ const pg = require("pg");
 
 const sequelize = new Sequelize(
     process.env.DATABASE_NAME,
-    process.env.DATABASE_USER || default,
-    process.env.DATABASE_PASSWORD || lOKBchDd2xU8,
+    default,
+    lOKBchDd2xU8,
     {
         host: 'ep-super-bush-a4gsun3t.us-east-1.aws.neon.tech',
         dialect: "postgres",
