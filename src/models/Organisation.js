@@ -2,8 +2,8 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const User = require("./user");
 
-const Org = sequelize.define(
-	"Org",
+const Organisation = sequelize.define(
+	"Organisation",
 	{
 		orgId: {
 			type: DataTypes.STRING,
@@ -25,4 +25,4 @@ const Org = sequelize.define(
 	}
 );
 
-module.exports = Org;
+module.exports = Organisation;

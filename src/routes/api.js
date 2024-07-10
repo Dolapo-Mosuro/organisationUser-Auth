@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Org } = require("../models");
+const { User, organisation } = require("../models");
 const authToken = require("../middlewares/authToken");
 
 router.use(authToken);
@@ -58,7 +58,7 @@ router.get("/users", authToken, async (req, res) => {
 router.get("/organisations", async (req, res) => {
 	try {
 		const user = await User.findByPk(req.user.userId, {
-			include: Org,
+			include: organisation,
 		});
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
@@ -82,7 +82,9 @@ router.get("/organisations", async (req, res) => {
 
 router.get("/organisations/:orgId", authToken, async (req, res) => {
 	try {
-		const org = await Org.findOne({ where: { orgId: req.params.orgId } });
+		const organisation = await organisation.findOne({
+			where: { orgId: req.params.orgId },
+		});
 		if (!org) {
 			return res.status(404).json({ message: "Organization not found" });
 		}
@@ -102,18 +104,22 @@ router.get("/organisations/:orgId", authToken, async (req, res) => {
 	}
 });
 
-router.post("/organisations", async (req, res) => {
+router.post("/organisations", authToken, async (req, res) => {
 	const { orgId, name, description } = req.body;
 
 	try {
-		const org = await Org.create({ orgId, name, description });
-		es.status(201).json({
+		const organisation = await organisation.create({
+			orgId,
+			name,
+			description,
+		});
+		res.status(201).json({
 			status: "success",
 			message: "Organization created successfully",
 			data: {
-				orgId: org.orgId,
-				name: org.name,
-				description: org.description,
+				orgId: organisation.orgId,
+				name: organisation.name,
+				description: organisation.description,
 			},
 		});
 	} catch (error) {
@@ -134,19 +140,21 @@ router.post("/organisations", async (req, res) => {
 	}
 });
 
-router.post("/organisations/:orgId/users", async (req, res) => {
+router.post("/organisations/:orgId/users", authToken, async (req, res) => {
 	const { userId } = req.body;
 
 	try {
-		const org = await Org.findOne({ where: { orgId: req.params.orgId } });
-		if (!org) {
+		const organisation = await organisation.findOne({
+			where: { orgId: req.params.orgId },
+		});
+		if (!organisation) {
 			return res.status(404).json({ message: "Organization not found" });
 		}
 		const user = await User.findByPk(userId);
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
 		}
-		await org.addUser(user);
+		await organisation.addUser(user);
 		res
 			.status(200)
 			.json({ message: "User added to organization successfully" });

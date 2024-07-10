@@ -1,17 +1,17 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../config/db");
 const User = require("./user");
-const Org = require("./org");
+const Organisation = require("./Organisation");
 
 // Define many-to-many relationship
-Org.belongsToMany(User, { through: "UserOrganisations" });
-User.belongsToMany(Org, { through: "UserOrganisations" });
+Organisation.belongsToMany(User, { through: "UserOrganisations" });
+User.belongsToMany(Organisation, { through: "UserOrganisations" });
 
 const database = {
 	Sequelize,
 	sequelize,
 	User,
-	Org,
+	Organisation,
 };
 
 database.sequelize
