@@ -99,6 +99,7 @@ router.post("/login", async (req, res) => {
 		}
 
 		// Validate password
+		const hashedPassword = await bcrypt.hash(password, 10);
 		const isPasswordValid = await bcrypt.compare(password, user.password);
 
 		if (!isPasswordValid) {
@@ -112,7 +113,7 @@ router.post("/login", async (req, res) => {
 		// Generate JWT token
 		const token = jwt.sign(
 			{ userId: user.userId, email: user.email },
-			process.env.JWT_SECRET,
+			process.env.JWT_KEY,
 			{ expiresIn: "1h" }
 		);
 
