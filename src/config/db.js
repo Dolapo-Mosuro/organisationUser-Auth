@@ -7,9 +7,9 @@ const sequelize = new Sequelize(
     "default",
     "lOKBchDd2xU8",
     {
-        host: ep-super-bush-a4gsun3t.us-east-1.aws.neon.tech,
+        host: "ep-super-bush-a4gsun3t.us-east-1.aws.neon.tech",
         dialect: "postgres",
-        dialectModule: pg,
+        dialectModule: "pg",
         port: process.env.DATABASE_PORT,
         logging: false,
         dialectOptions: {
