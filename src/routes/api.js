@@ -140,12 +140,12 @@ router.post("/organisations", async (req, res) => {
 	}
 });
 
-router.post("/organisations/:OrganisationId/users", async (req, res) => {
+router.post("/organisations/:orgId/users", async (req, res) => {
 	const { userId } = req.body;
 
 	try {
 		const org = await Organisation.findOne({
-			where: { OrganisationId: req.params.OrganisationId },
+			where: { orgId: req.params.orgId },
 		});
 		if (!org) {
 			return res.status(404).json({ message: "Organization not found" });
