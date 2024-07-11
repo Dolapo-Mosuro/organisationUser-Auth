@@ -13,7 +13,7 @@ const generateUniqueId = (value) => {
 
 router.post("/register", async (req, res) => {
 	const { firstName, lastName, email, password, phone } = req.body;
-	console.log(req.body);
+	// console.log(req.body);
 	// Validate input fields
 	if (!firstName || !lastName || !email || !password) {
 		return res.status(422).json({
