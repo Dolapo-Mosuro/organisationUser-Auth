@@ -216,21 +216,21 @@ router.get("/users", authToken, async (req, res) => {
 
 router.get("/organisations", async (req, res) => {
 	try {
-		const user = await User.findOne({ where: { userId: req.user.userId },
-  			include: Organisation,
+		const user = await User.findOne({
+			where: { userId: req.user.userId },
+			include: Organisation,
 		});
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
 		}
+
 		res.status(201).json({
 			status: "success",
-			message: "Organization created successfully",
+			message: "Organisations fetched successfully",
 			data: {
-				organisations: user.Orgs.map((org) => ({
-					orgId: org.orgId,
-					name: org.name,
-					description: org.description,
-				})),
+				orgId: org.orgId,
+				name: org.name,
+				description: org.description,
 			},
 		});
 	} catch (error) {
