@@ -222,12 +222,12 @@ router.get("/organisations", async (req, res) => {
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
 		}
-		res.status(201).json({
+		res.status(200).json({
 			status: "success",
 			message: "Organization created successfully",
 			data: {
-				organisations: user.Orgs.map((org) => ({
-					orgId: org.orgId,
+				organisations: user.Organisations.map((org) => ({
+					OrganisationId: org.OrganisationId,
 					name: org.name,
 					description: org.description,
 				})),
