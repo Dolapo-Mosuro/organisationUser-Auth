@@ -46,13 +46,13 @@ router.post("/register", async (req, res) => {
 			phone,
 		});
 
-		const defaultOrg = await Organisation.create({
-			OrganisationId: `org-${userId}`,
-			name: `Default Organization for ${userId}`,
-			description: `This is the default organization for ${firstName} ${lastName}`,
-		});
+		//const defaultOrg = await Organisation.create({
+		//	OrganisationId: `org-${userId}`,
+		//	name: `Default Organization for ${userId}`,
+		//	description: `This is the default organization for ${firstName} ${lastName}`,
+		//});
 
-		await user.addOrganisation(defaultOrg);
+		//await user.addOrganisation(defaultOrg);
 
 		const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
 			expiresIn: "1h",
