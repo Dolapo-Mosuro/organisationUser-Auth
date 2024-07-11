@@ -57,8 +57,8 @@ router.get("/users", authToken, async (req, res) => {
 
 router.get("/organisations", async (req, res) => {
 	try {
-		const user = await User.findByPk(req.user.id, {
-			include: Organisation,
+		const user = await User.findOne({ where: { userId: req.user.userId },
+  			include: Organisation,
 		});
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
