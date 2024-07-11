@@ -11,6 +11,7 @@ const PORT = process.env.PORT;
 
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/api", (req, res) => {
 	res.send("Hello, world!");
