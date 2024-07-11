@@ -57,7 +57,7 @@ router.get("/users", authToken, async (req, res) => {
 
 router.get("/organisations", async (req, res) => {
 	try {
-		const user = await User.findByPk(req.user.userId, {
+		const user = await User.findByPk(req.user.id, {
 			include: Organisation,
 		});
 		if (!user) {
