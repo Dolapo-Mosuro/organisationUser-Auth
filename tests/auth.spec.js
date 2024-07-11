@@ -1,6 +1,6 @@
 const request = require("supertest");
 const { Sequelize } = require("sequelize");
-const { User, Org } = require("../src/models");
+const { User, Organisation } = require("../src/models");
 const app = require("../src/app");
 
 // Mock database setup
@@ -77,7 +77,7 @@ describe("Authentication API", () => {
 
 		expect(response.status).toBe(201);
 
-		const organisations = await Org.findAll({
+		const organisations = await Organisation.findAll({
 			where: { name: "Default Organization" },
 		});
 		const createdOrganisation = organisations[0].toJSON();

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Org } = require("../models");
+const { User, Organisation } = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -13,7 +13,7 @@ const generateUniqueId = (value) => {
 
 router.post("/register", async (req, res) => {
 	const { firstName, lastName, email, password, phone } = req.body;
-	console.log(req.body);
+
 	// Validate input fields
 	if (!firstName || !lastName || !email || !password) {
 		return res.status(422).json({
@@ -46,13 +46,13 @@ router.post("/register", async (req, res) => {
 			phone,
 		});
 
-		const defaultOrg = await Org.create({
-			orgId: `org-${userId}`,
-			name: `Default organisation for ${userId}`,
-			description: `This is the default organisation for ${firstName} ${lastName}`,
+		const defaultOrg = await Organisation.create({
+			OrganisationId: `org-${userId}`,
+			name: `Default Organization for ${userId}`,
+			description: `This is the default organization for ${firstName} ${lastName}`,
 		});
 
-		await user.addOrg(defaultOrg);
+		await user.addOrganisation(defaultOrg);
 
 		const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
 			expiresIn: "1h",
