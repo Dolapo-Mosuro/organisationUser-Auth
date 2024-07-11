@@ -8,7 +8,6 @@ const Organisation = sequelize.define(
 		OrganisationId: {
 			type: DataTypes.STRING,
 			unique: true,
-			primaryKey: true,
 			allowNull: false,
 		},
 		name: {
