@@ -102,7 +102,7 @@ router.get("/organisations/:orgId", authToken, async (req, res) => {
 
 		res.status(200).json({
 			status: "success",
-			message: "Organization retrieved successfully",
+			message: "Organization fetched successfully",
 			data: {
 				orgId: org.orgId,
 				name: org.name,
